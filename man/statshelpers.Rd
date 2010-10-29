@@ -1,88 +1,58 @@
-\name{stats helpers}
+\name{statshelpers}
 \alias{a.findcorrelations}
 \alias{a.iqr}
-\alias{a.proportion.test}
 \alias{a.qr}
-\alias{a.rankval}
-\alias{a.showextremes}
-\title{Misc R statistics helper functions}
-\usage{
-a.findcorrelations(df, vars1=names(df), vars2=vars1, min.cor=0.5)
-
-a.iqr(x)
-
-a.proportion.test(x1, x2, y1, y2, totals=FALSE)
-
-a.qr(x)
-
-a.rankval(x)
-
-a.showextremes(df, vars, largest=5, showalso=NULL)
-}
+\alias{a.proportion.test}
+\alias{a.printextremes}
+\title{Simple stats and tabulation helper functions}
 \description{
-\code{a.findcorrelations(df, vars1, vars2, min.cor}
-  checks pairs of variables for correlation.
-  Returns a sorted vector of pairwise correlations whose absolute value
-  is greater-or-equal \code{min.cor}.
-  Uses all pairs of variables from dataframe \code{df} mentioned in
-  character vectors (\code{vars1} x \code{vars2}), 
-  except that is returns only the lower
-  triangle of that matrix if \code{vars2} is missing.
-  Assesses the variable itself and also the corresponding rank vector
-  (for rank correlations)
-  Value pairs containing \code{NAs} are ignored in each \code{cor}
-  call individually.
+  \code{a.iqr(x)} interquartile range of numeric vector
+  
+  \code{a.qr(x)} ratio of 3rd to 1st quartile of numeric vector
 
-\code{a.iqr(x)}
-  computes the inter-quartile range of numeric vector \code{x}.
+  \code{a.proportion.test(x1,x2, y1,y2, totals=FALSE)} 
+  compares x1/x2 to y1/y2 using fisher.test and prints the result.
+  totals=TRUE means the supplied x2 is in fact (x1+x2); 
+  ditto for y2.
 
-\code{a.proportion.test(x1, x2, y1, y2)}
-  tests the proportion x1/x2 against y1/y2 using both Fisher exact p and
-  Chi-squared test, prints results of both and returns results of Chi-squared.
-  If \code{totals=TRUE}, tests x1/(x2-x1) against y1/(y2-y1) instead.
-  The arguments must be scalars, not vectors.
+  \code{a.findcorrelations(df, vars1=names(df), vars2=vars1, min.cor=0.5)} 
+  computes corrrelation (of values and of ranks) for each pair of variables 
+  from (vars1,vars2), sorts them by size and returns the large ones
+  (along with descriptive names) as a vector. Ignores NAs.
 
-\code{a.qr(x)}
-  computes the quartile ratio (q75/q25) of numeric vector \code{x}.
-
-\code{a.rankval(x)}
-  ranks the values from vector \code{x} using \code{rank()}
-  but leaves \code{NAs} as \code{NAs}.
-
-\code{a.showextremes(df, vars, largest, showalso)}
-  shows the records from data frame \code{df} that contain the 
-  \code{largest} largest values (or the \code{largest} smallest if
-  \code{largest} is negative) with respect to each of \code{df}'s variables
-  whose name is mentioned in \code{vars} (which is a character vector).
-  The extreme records for each of these variables are found; from each
-  record, only these variables plus those whose name is mentioned in
-  character vector \code{showalso} are shown.
+  \code{a.printextremes(df, vars, largest=5, showalso=NULL} 
+  given variable names a,b,c from dataframe df, prints the
+  tuples a,b,c with the 5 largest values of a. Ditto for b and for c.
+  largest can be a vector (along vars) and negative values print
+  smallest instead of largest. Factors are moved from vars to showalso.
 }
-\arguments{
-\item{df}{a dataframe, see description above.}
-\item{vars1}{a character vector, see description above.}
-\item{vars2}{a character vector, see description above.}
-\item{min.cor}{a number in range 0..1, see description above.}
-\item{x}{a vector, see description above.}
-\item{x1}{see description above.}
-\item{x2}{see description above.}
-\item{y1}{see description above.}
-\item{y2}{see description above.}
-\item{totals}{a logical value, see description above.}
-\item{vars}{a character vector, see description above.}
-\item{largest}{an integer, see description above.}
-\item{showalso}{a character vector, see description above.}
+\details{
+  Type the name of a function to see its source code for details.
 }
 \author{Lutz Prechelt \email{prechelt@inf.fu-berlin.de}}
+\seealso{
+\code{\link{cor}},
+\code{\link{rank}},
+\code{\link{quantile}},
+\code{\link{summary}}.
+}
 \examples{
-data(iris)
-summary(iris$Sepal.Width)
-a.iqr(iris$Sepal.Width)
-a.qr(iris$Sepal.Width)
-a.findcorrelations(iris)
-a.proportion.test(7,11, 17,19)
-a.showextremes(iris, c("Sepal.Width","Sepal.Length"), largest = -5,
-               showalso = c("Petal.Length"))
+set.seed(17)
+base = rnorm(100)
+a = floor(base*10)
+b = floor(a+runif(100, -10, 11))
+c=floor(base)
+d=ordered(floor(b/8))  # allows for rank correlation only
+df=data.frame(a=a,b=b,c=c,d=d)
+
+a.findcorrelations(df,min.cor=0.85)
+
+a.printextremes(iris, vars=c("Species", "Sepal.Length", "Petal.Width"), 
+                largest=c(3, -4, -5), showalso=c("Petal.Length"))
 
 }
-\keyword{manip} 
+\keyword{quantile} 
+\keyword{quartile} 
+\keyword{correlation} 
+\keyword{rank} 
+\keyword{summary} 

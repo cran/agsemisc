@@ -4,7 +4,7 @@
 \alias{prepanel.0}
 \title{Plot helper functions}
 \description{
-  \code{l.resetparams()} sets colors and plotting parameters suitable
+  \code{a.resetplotparams()} sets colors and plotting parameters suitable
   for document production.
   
   \code{plotfit(fit, ...)} plots an \code{\link{lm}} object

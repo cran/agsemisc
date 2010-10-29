@@ -71,7 +71,10 @@ data(iris)
 xyplot(Sepal.Width ~ Sepal.Length | eqc(Sepal.Length),
        subset=grep.b("v",Species), data=iris)
 
-x = c(4,9,NA,4,4,27,NA,27); table(or.else(x,88)); table(x); tableNA(x)
+x = c(4,9,NA,4,4,27,NA,27)
+table(or.else(x,88))
+table(x)
+tableNA(x)
 
 printn(levels(iris$Species))
 }
