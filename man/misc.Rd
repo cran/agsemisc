@@ -18,7 +18,7 @@
   rather than as an integer vector indices. Often useful for Lattice
   \code{subset} calls.
 
-\code{grep.b(pattern, x)} performs \code{grep(pattern, x, value=T} and
+\code{grep.s(pattern, x)} performs \code{grep(pattern, x, value=TRUE)} and
 thus returns the matched strings rather than their indices.
 
 \code{orderavg(x, by)} orders the observations from vector \code{x}

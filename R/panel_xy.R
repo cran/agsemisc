@@ -1,12 +1,12 @@
 panel.xy <- function(x, y, type = "p,r,r.pred,r=,N=,grid",
-                     r.min=0.5, level=0.8, unicolor=FALSE, ...) {
+                     r.min=0.5, level=0.8, slope=0.0, intercept=0.0,
+                     unicolor=FALSE, ...) {
   #---------- nested function panel.lminterval: ----------
   panel.lminterval = function(x, y, 
                               lmplot=TRUE, lmconfplot=FALSE, 
                               lmpredplot=TRUE, lqsplot=FALSE,
                               unicolor=FALSE, verbose=FALSE, level, ...) {
-    # Should not be used directly because of missing missing value handling.
-    # Call panel.xy instead.
+    # Cannot be used directly because of missing missing value handling.
     rl = trellis.par.get("regression.line")
     if (!(lmplot|lmconfplot|lmpredplot|lqsplot)) return() # nothing to do
     #--- lm line:
@@ -63,12 +63,12 @@ panel.xy <- function(x, y, type = "p,r,r.pred,r=,N=,grid",
       lqs.fit = MASS::lqs(y~x, data=data.frame(list(x=x, y=y)))
       #lqs.fit = MASS::lqs(x, y, method="lqs", 
       #                    control=list(nsamp="best",adjust=TRUE), ...)
-      intercept = lqs.fit$coef[1]
-      slope = lqs.fit$coef[2]
+      lqs.intercept = lqs.fit$coef[1]
+      lqs.slope = lqs.fit$coef[2]
       if (unicolor)
-        panel.abline(b=slope, a=intercept, ...)
+        panel.abline(b=lqs.slope, a=lqs.intercept, ...)
       else {
-        panel.abline(b=slope, a=intercept,
+        panel.abline(b=lqs.slope, a=lqs.intercept,
                      col.line=rl$col.lqs, lty=rl$lty.lqs, lwd=rl$lwd.lqs)
       }
       if (verbose) {
@@ -90,11 +90,12 @@ panel.xy <- function(x, y, type = "p,r,r.pred,r=,N=,grid",
     panel.grid(h=-1, v=-1, col="grey50", lty=3)
     type = setdiff(type, c("g","grid"))
   }
-  #--- type == ab:
-  if ("ab" %in% type) {
-    # caller must provide a= and b= , h= and v= will conflict with grid
-    panel.abline(x, y, a=a, b=b, ...)  
-    type = setdiff(type, "ab")
+  #--- type == abline:
+  if ("abline" %in% type) {
+    # caller must provide slope= and intercept=
+    a.l = trellis.par.get("ab.line") # nonstandard extension for panel.xy
+    panel.abline(a=intercept, b=slope, col=a.l$col, lty=a.l$lty, lwd=a.l$lwd)  
+    type = setdiff(type, "abline")
   }
   #--- type == rug:
   if ("rug" %in% type) {
@@ -130,7 +131,7 @@ panel.xy <- function(x, y, type = "p,r,r.pred,r=,N=,grid",
   #--- type == v:
   if ("v" %in% type) {
     cat(paste(c("median x=", " y=", " mean x=", " y=",
-                " sdev x=", " y=", " cor(x,y)=", ),
+                " sdev x=", " y=", " cor(x,y)="),
               signif(c(median(x), median(y), mean(x), mean(y), 
                        sqrt(var(x)), sqrt(var(y)), corr), 3), sep=""), 
         "\n", sep="")

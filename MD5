@@ -1,0 +1,15 @@
+719280dc51d858be767cc24fba6f8d56 *CHANGES
+22fd2fe1de3ac8a0d9771eb184272e04 *DESCRIPTION
+f10a7b111ba1bf6b68504a674a52325b *NAMESPACE
+0bc466a7a416d0e51bf9d0e1bbb5e8b6 *R/misc.R
+eb4317be90c1406bea19cf9541604b2c *R/panel_bwstrip.R
+f3712aa57c2f691b27550e6754873ec7 *R/panel_xy.R
+a3f0e6b31cbe67f37baef68a637cceef *R/plothelpers.R
+e347489635014552b4e31ee2b0979aba *R/statshelpers.R
+91da2067eb3f67dfd3c147b7196caaf6 *README.md
+6ec7d804ec7a896d400443663d2c8ced *man/misc.Rd
+6746f4094be9602fc0fd8eb78f036d1b *man/panel.bwstrip.Rd
+fb6762db448c18093625b80149eb6bfd *man/panel.xy.Rd
+d04972eb895cd5466f73ebc77d986aa4 *man/plotf.Rd
+c8b0bb01f3c490722d02c7658cde00e7 *man/plothelpers.Rd
+bbafb7a16878ed18fe6740d361ec22f2 *man/statshelpers.Rd

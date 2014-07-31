@@ -12,7 +12,8 @@
 }
 \usage{
 panel.xy(x, y, type = "p,r,r.pred,r=,N=,grid",
-         r.min = 0.5, level = 0.8, unicolor = FALSE, ...)
+         r.min = 0.5, level = 0.8, slope=0.0, intercept=0.0,
+         unicolor = FALSE, ...)
 }
 \arguments{
 \item{x}{
@@ -46,9 +47,11 @@ panel.xy(x, y, type = "p,r,r.pred,r=,N=,grid",
     locally weighted regression via \code{panel.loess}, whose
     configuration parameters will be passed to the call if given.
     The line is suppressed if there are less than 8 points.
-  \code{"ab"} adds an arbitrary line (described by parameters \code{a=}
-    and \code{b=}) via \code{panel.ab}. This does currently not work due
-    to parameter name clashes.
+  \code{"abline"} adds an arbitrary line 
+    (described by parameters \code{slope=} and \code{intercept=})
+    via \code{panel.abline}.
+    col, lty and lwd are taken from \code{trellis.par.get("ab.line")} 
+    (non-standard extension as introduced by \code{a.resetplotparams}). 
   \code{"rug"} adds a rug plot via \code{panel.rug}.
   \code{"cor"} prints the correlation coefficient computed by
     \code{\link{cor}} in the lower right corner of the plot.
@@ -63,6 +66,9 @@ panel.xy(x, y, type = "p,r,r.pred,r=,N=,grid",
 \item{level}{
   The confidence level of the intervals plotted by \code{type "r.conf"}
   and \code{type "r.pred"}.}
+\item{slope, intercept}{
+  The parameters of the fixed line inserted by means of \code{panel.abline}
+  if \code{type} contains \code{"abline"}.}
 \item{unicolor}{
   The colors used for the lines drawn by
   types \code{"r", "r.pred", "r.conf", "loess"} are normally taken from
@@ -70,7 +76,7 @@ panel.xy(x, y, type = "p,r,r.pred,r=,N=,grid",
   (as introduced by \code{a.resetplotparams}). 
   However, if you use \code{xyplot} with 
   \code{panel=panel.superpose, panel.groups=panel.xy}, you must specify
-  \code{unicolor=T}. The regression lines will then be plotted in the
+  \code{unicolor=TRUE}. The regression lines will then be plotted in the
   style given by \code{trellis.par.get("superpose.line")} according to
   the respective group. }
 \item{\dots}{Further parameters as needed for instance by 

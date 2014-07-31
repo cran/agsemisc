@@ -49,19 +49,24 @@ plotf <- function(theplot, file="plot%03d", type=c("active"),
     do.plot(theplot)
   }
   if ("png" %in% type) {  # PNG
-    png(file = paste(file, ".png", sep=""),
+    png(filename = paste(file, ".png", sep=""),
         width=wi*dpi, height=hi*dpi, pointsize=ppoints, res=dpi, ...)
     do.plot(theplot)
   }
   if (("jpeg" %in% type) | ("jpg" %in% type)) {  # JPEG
-    jpeg(file = paste(file, ".jpg", sep=""),
+    jpeg(filename = paste(file, ".jpg", sep=""),
          width=wi*dpi, height=hi*dpi, pointsize=ppoints, res=dpi, ...)
     do.plot(theplot)
   }
   if ("wmf" %in% type) {  # Windows Metafile
-    win.metafile(file = paste(file, ".wmf", sep=""),
-                 width=wi, height=hi, pointsize=points, ...)
-    do.plot(theplot)
+    if (exists("win.metafile")) {
+      do.call("win.metafile", list(filename = paste(file, ".wmf", sep=""),
+                                   width=wi, height=hi, pointsize=points, ...))
+      do.plot(theplot)
+    }
+    else {
+      warning("plotf: ignoring type 'wmf' (not supported on this machine)")
+    }
   }
   invisible()  # return nothing
 }
@@ -91,12 +96,19 @@ a.resetplotparams = function() {
   b.r$lty = "dotted"
   trellis.par.set("reference.line", b.r)
   r.l = trellis.par.get("regression.line") # nonstandard extension for panel.xy
+  if (is.null(r.l)) r.l = list()
   r.l$col.lm   = "blue";    r.l$lty.lm   = 1; r.l$lwd.lm   = 2
   r.l$col.conf = "blue";    r.l$lty.conf = 3; r.l$lwd.conf = 1
   r.l$col.pred = "blue";    r.l$lty.pred = 3; r.l$lwd.pred = 1
   r.l$col.lqs  = "red";     r.l$lty.lqs  = 2; r.l$lwd.lqs  = 2
   r.l$col.loess= "violet";  r.l$lty.loess= 1; r.l$lwd.loess= 2
   trellis.par.set("regression.line", r.l)
+  a.l = trellis.par.get("ab.line") # nonstandard extension for panel.xy
+  if (is.null(a.l)) a.l = list()
+  a.l$col  = "darkblue"
+  a.l$lty  = 1
+  a.l$lwd  = 2
+  trellis.par.set("ab.line", a.l)
   #-- Lattice boxplot box and whiskers
   b.r = trellis.par.get("box.rectangle")
   b.r$col = "blue"
